@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Http\Resources;
+
+use App\Enums\CustomerStatus;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
+
+class CustomerResource extends JsonResource
+{
+    public static $wrap = false;
+
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     */
+    public function toArray($request)
+    {
+        $defaults = [
+            'id' => $this->user_id,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'email' => $this->user->email,
+            'phone' => $this->phone,
+            'status' => $this->status === CustomerStatus::Active->value,
+            'created_at' => (new \DateTime($this->created_at))->format('Y-m-d H:i:s'),
+            'updated_at' => (new \DateTime($this->updated_at))->format('Y-m-d H:i:s'),
+            'shippingAddress' => [
+                'id' => null,
+                'address1' => null,
+                'address2' => null,
+                'city' => null,
+//                'state' => null,
+                'zipcode' => null,
+                'country_code' => null,
+            ],
+            'billingAddress' => [
+                'id' => null,
+                'address1' => null,
+                'address2' => null,
+                'city' => null,
+//                'state' => null,
+                'zipcode' => null,
+                'country_code' => null,
+            ]
+        ];
+
+        if (isset($this->shippingAddress)) {
+            $shipping = $this->shippingAddress;
+            $defaults = array_merge($defaults,[
+                'shippingAddress' => [
+                    'id' => $shipping->id,
+                    'address1' => $shipping->address1,
+                    'address2' => $shipping->address2,
+                    'city' => $shipping->city,
+                    'state' => $shipping->state,
+                    'zipcode' => $shipping->zipcode,
+                    'country_code' => $shipping->country->code,
+                ]
+            ]);
+        }
+
+        if (isset($this->billingAddress)) {
+            $billing = $this->billingAddress;
+            $defaults = array_merge($defaults, [
+                'billingAddress' => [
+                    'id' => $billing->id,
+                    'address1' => $billing->address1,
+                    'address2' => $billing->address2,
+                    'city' => $billing->city,
+                    'state' => $billing->state,
+                    'zipcode' => $billing->zipcode,
+                    'country_code' => $billing->country->code,
+                ]
+            ]);
+        }
+        return $defaults;
+    }
+}
