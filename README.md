@@ -10,13 +10,14 @@ Make sure you have environment setup properly. You will need Docker, PHP8.1, Nod
 3. Navigate to the project's root directory using terminal
 4. Run `composer install`
 5. Set the encryption key by executing `sail artisan key:generate --ansi`
-6. Run migrations `sail artisan migrate --seed`
-7. Run storage link `sail artisan storage:link`
-8. Create your own stripe test credentials and add in the .env
-9. Open new terminal and navigate to the project root directory
-10. Run `sail npm install`
-11. Run `sail npm run dev` to start vite server for Laravel frontend
-12. To run the tests `sail artisan test`
+6. Run the containers `./vendor/bin/sail up -d`
+7. Run migrations `sail artisan migrate --seed`
+8. Run storage link `sail artisan storage:link`
+9. Create your own stripe test credentials and add in the .env
+10. Open new terminal and navigate to the project root directory
+11. Run `sail npm install`
+12. Run `sail npm run dev` to start vite server for Laravel frontend
+13. To run the tests `sail artisan test`
 
 ### Install Vue.js Admin Panel
 1. Navigate to `backend` folder
